@@ -7,9 +7,10 @@ public class EnemyControl : MonoBehaviour
 {
     private GameObject player;
     private Rigidbody enemyrb;
-    private bool grounded = false;
     public float speed;
     private GameObject parent;
+    private int counter = 0;
+    private int gainDifficulty = 3;
     // Start is called before the first frame update
     void Start()
     {
@@ -33,19 +34,31 @@ public class EnemyControl : MonoBehaviour
             multiplier = 1f;
         }
         Vector3 direction = (player.transform.position - transform.position);
-        if (direction.x > 1) direction.x = 1;
+        direction.x = direction.x * 1/ gainDifficulty;
         direction.y = 0;
-        if (direction.z > 1) direction.z = 1;
-
+        direction.z = direction.z * 1/gainDifficulty;
+        counter++;
         enemyrb.AddForce(direction*enemyrb.mass* speed * multiplier);
-
-        grounded = false;
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.name == "Island")
+        if (counter > 500)
         {
-            grounded = true; ;
+/*            enemyrb.velocity = Vector3.zero;
+            enemyrb.angularVelocity = Vector3.zero;*/
+            counter = 0;
         }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PowerUp"))
+        {
+            enemyrb.mass = enemyrb.mass * 2;
+            speed = speed * 2;
+            Destroy(other.gameObject);
+        }
+    }
+    IEnumerator PowerUpCD()
+    {
+        yield return new WaitForSeconds(7);
+        speed = speed / 2;
+        enemyrb.mass = enemyrb.mass / 2;
     }
 }
