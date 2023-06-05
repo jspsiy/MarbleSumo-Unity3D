@@ -112,6 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
+  powerUpIndicator: {fileID: 6773346759198243497, guid: 03fae6c756726aa4d87b8fea84148912, type: 3}
 --- !u!54 &8735367067656770122
 Rigidbody:
   m_ObjectHideFlags: 0
